@@ -1,0 +1,52 @@
+ <div class="form-group">
+            <label for="lnpass" class="form-label">User Name</label>
+            <input type="text" name="uname" id="uname" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lnpass" class="form-label">Password</label>
+            <input type="password" name="opass" id="opass" class="form-control" required>
+        </div>
+                
+
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+
+    </form>
+</div>
+
+
+
+CREATE OR REPLACE FUNCTION is_otp_expired(otp_timestamp text, expiration_minutes INTEGER)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    current_timestamp TIMESTAMP := now();
+    elapsed_interval INTERVAL;
+BEGIN
+    elapsed_interval := current_timestamp - otp_timestamp::TIMESTAMP;
+
+    IF elapsed_interval <= INTERVAL '1 minute' * expiration_minutes THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+$$;
+CREATE OR REPLACE function update_ma_mail_user(lcpass text, un text) 
+RETURNS boolean
+language plpgsql
+AS $$
+
+BEGIN
+    UPDATE ma_mail_user
+    SET pass = lcpass
+	where uname=un;
+    RETURN TRUE;
+END;
+$$;
+/
+DROP FUNCTION update_ma_mail_user(text,text)
+select * from ma_mail_user
+select update_ma_mail_user('jim','beulah')
+SELECT is_otp_expired('2023-06-04 15:30:50.1849808', 5);
