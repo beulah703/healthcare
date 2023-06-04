@@ -1,0 +1,10 @@
+spring\mail\orm\dao\UserDao.class
+spring\mail\orm\services\UserServices.class
+spring\mail\orm\model\UserPass.class
+spring\mail\orm\send\controller\MailController.class
+spring\mail\orm\dao\UserDaoImpl.class
+spring\mail\orm\send\MailSend$2.class
+spring\mail\orm\model\OTPVerify.class
+spring\mail\orm\send\MailSend$1.class
+spring\mail\orm\send\MailSend.class
+spring\mail\orm\send\Login.class
