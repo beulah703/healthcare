@@ -18,7 +18,7 @@
 
 				<div class="card">
 					<div class="card-body">
-						<h5 class="card-title">Todays Appointments Today</h5>
+						<h5 class="card-title">Todays Appointments </h5>
 						<p id="toapp" class="card-text"></p>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 			<h3>Appointments</h3>
 			<div class="row mt-4">
 				<div class="col-md-12">
-					<table class="table table-bordered" id="patientTable">
+					<table class="table table-bordered" >
 						<thead>
 							<tr>
 								<th>Appointment</th>
@@ -53,32 +53,20 @@
 		</div>
 <div class="container">
 			<div class="card-container" align="center">
-		<h3>Diagnostic Tests</h3>
-		<table class="table table-striped">
+		<h3>Today Diagnostic Tests</h3>
+		<table class="table table-striped" >
 			<thead>
 				<tr>
 					<th>Test ID</th>
 					<th>Test Name</th>
-					<th>Date</th>
-					<th>Status</th>
+					
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="teststable">
 				<!-- Dynamically populated with patient's diagnostic tests -->
-				<tr>
-					<td>1</td>
-					<td>Blood Test</td>
-					<td>2023-06-10</td>
-					<td>Completed</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>X-ray</td>
-					<td>2023-06-15</td>
-					<td>Upcoming</td>
-				</tr>
-			</tbody>
-		</table>
+				
+			</tbody >
+		</table >
 	</div>
 	</div>
 	</div>
@@ -89,9 +77,10 @@
 				url : "./getapptestcards", // Specify the URL of the controller method
 				type : "GET", // Use POST or GET depending on your server-side implementation
 				// Pass the patientId as data to the server
+			
 				success : function(response) {
 					var data = JSON.parse(response);
-
+					console.log("cards");
 					// Iterate over the data and create table rows
 					var toapp = document.getElementById("toapp");
 					var totest = document.getElementById("totest");
@@ -100,38 +89,43 @@
 					totest.textContent = data[1];
 
 					var tableBody = $('#apptable');
-					//var tableBody2 = $('#teststable');
-
-					// Clear any existing table rows
+				
 					tableBody.empty();
+					console.log(data);
 					var count = 0;
 					for (var i = 2; i < data.length; i++) {
 						var newRow = $('<tr>');
+						console.log(data[i].length);
 						for (var j = 0; j < 4; j++) {
-
 							if (data[i].length == 2) {
 								count = count + 1;
+								break;
 							} else {
+							console.log(data[i][j]);
 								newRow.append($('<td>').text(data[i][j]));
 								tableBody.append(newRow);
 							}
 
 						}
 					}
-					/* console.log(count);
-						for (var i =count; i < data.length; i++) {
+					var tableBody2 = $('#teststable');
+					 console.log(count);
+					 console.log(data.length);
+					 
+						for (var i =data.length-count; i < data.length; i++) {
+							console.log("hii");
 							var newRow1 = $('<tr>');
 						for (var k = 0; k < 2; k++) {
 							
-							console.log(data[i][0]);
+							console.log("t4"+data[i][0]);
 							
 							newRow1.append($('<td>').text(data[i][k]));
 							
-							//newRow.append($('<td>').text(data[i].status));
+							newRow.append($('<td>').text(data[i].status));
 							tableBody2.append(newRow1);	
 						
 					}
-					} */
+					} 
 
 				},
 				error : function(xhr, status, error) {
@@ -149,9 +143,11 @@
       
   <div class="card-body">
     <div class="doctor-details">
-      <p id="doctorName" class="card-text">Doctor: John Doe</p>
-      <p id="appointmentFees" class="card-text">Appointment Fees: $150</p>
-      <p id="lastVisitDate" class="card-text">Last Visit: 10-06-2023</p>
+    <strong> <p class="card-text">Last Appointment</p></strong>
+      <p id="doctorName" class="card-text"></p>
+      <p id="appointmentFees" class="card-text"></p>
+      <p id="lastVisitDate" class="card-text"></p>
+       <p id="nextVisitDate" class="card-text"></p>
       <a href="#" onclick="viewPrescription()" class="card-link">View Prescription</a>
     </div>
         </div>
@@ -193,12 +189,44 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		  // Static data for the chart
-		  var labels = ['2023-06-01', '2023-06-02', '2023-06-03', '2023-06-04', '2023-06-05'];
-		  var bpData = [120, 130, 125, 128, 122];
-		  var cholesterolData = [180, 190, 175, 185, 180];
-		  var sugarData = [100, 110, 105, 108, 102];
+		   $.ajax({
+			      url: './getParaGroup', // Specify the URL of the controller method to retrieve the test details
+			      type: 'GET',
+			  	success : function(response) {
+					var data = JSON.parse(response);
+				
+					console.log(data);
+					var labels=[];
+					var cholesterolData =[];
+					var sugarData =[];
+					var bpData = [];
+					for(var i=0;i<data.length;i++){
+				var valueToAdd = data[i][1];
 
-		  // Create the chart
+				if (!labels.includes(valueToAdd)) {
+				  labels.push(valueToAdd);
+				}
+				var dta=data[i][0].split(" ")
+				if(dta[1]=="mg/dL" && !cholesterolData.includes(dta[0])){
+					console.log(dta[0]);
+				cholesterolData.push(dta[0]);
+				}
+				else if(dta[1]=="mmHg"  ){
+					console.log(dta[0]);
+					var dtb=dta[0].split("/")
+					if( !bpData.includes(dtb[0])){
+				bpData.push(dtb[0]);
+					}
+			
+				}	
+				else if(dta[1]=="kg" && !sugarData.includes(dta[0])){
+					console.log(dta[0]);
+					
+				sugarData.push(dta[0]);
+			
+				}	
+		
+					}
 		  var ctx = document.getElementById("healthChart").getContext("2d");
 		  var chart = new Chart(ctx, {
 		    type: "line",
@@ -244,7 +272,40 @@
 		      }
 		    }
 		  });
-		});
+		},
+		error : function(xhr, status, error) {
+			console.error("Error: " + error);
+		}
+	});
+		   $.ajax({
+			      url: './getPrescription', // Specify the URL of the controller method to retrieve the test details
+			      type: 'GET',
+			  	success : function(response) {
+					var data = JSON.parse(response);
+					
+					
+					console.log(data[0]);
+					console.log(data[1]);
+					console.log(data[2]);
+					console.log(data[3]);
+					console.log(data[4]);
+					var doctorNameElement = document.getElementById('doctorName');
+					var appointmentFeesElement = document.getElementById('appointmentFees');
+					var lastVisitDateElement = document.getElementById('lastVisitDate');
+					var nextVisitDateElement = document.getElementById('nextVisitDate');
+
+					doctorNameElement.textContent = 'Doctor: '+data[0][3];
+					appointmentFeesElement.textContent = 'Appointment Fees: '+data[0][4];
+					lastVisitDateElement.textContent = 'Last Visit: '+data[0][2];
+					nextVisitDateElement.textContent = 'Next Appointment: '+data[0][0];
+					},
+					error : function(xhr, status, error) {
+						console.error("Error: " + error);
+					}
+		   });
+
+});
+		
 
 	</script>
 	<style>
@@ -294,14 +355,14 @@
 
 <script>
   function viewPrescription() {
+	  $.ajax({
+	      url: './getPrescription', // Specify the URL of the controller method to retrieve the test details
+	      type: 'GET',
+	  	success : function(response) {
+			var data = JSON.parse(response);
     // Retrieve the prescription details (sample data for demonstration)
-    var prescriptionDetails = {
-      doctorName: "John Doe",
-      prescriptionDate: "2023-06-10",
-      medication: "Medication A, Medication B",
-      dosage: "2 pills daily",
-      instructions: "Take with meals",
-    };
+    console.log(data);
+   
 
     // Create the popup overlay
     var overlay = document.createElement("div");
@@ -325,15 +386,10 @@
     var title = document.createElement("h5");
     title.className = "popup-title";
     title.textContent = "Prescription Details";
-
+    var dat=data[0][1].split(",");
     var details = document.createElement("div");
     details.className = "prescription-details";
-    details.innerHTML = `
-     
-      <p><strong>Medication:</strong>Medication A, Medication B</p>
-      <p><strong>Dosage:</strong>2 pills daily</p>
-      <p><strong>Instructions:</strong> Take alongwith meals</p>
-    `;
+    details.innerHTML = '<p><strong>Medication: </strong>'+dat[0]+'</p><p><strong>Dosage: </strong>'+dat[1]+'</p><p><strong>Instructions: </strong>'+ dat[2]+'</p>';
 
     // Append the elements to the popup content
     content.appendChild(closeButton);
@@ -345,6 +401,8 @@
 
     // Append the overlay to the body
     document.body.appendChild(overlay);
+  }
+	  });
   }
 </script>
 
@@ -398,6 +456,7 @@
 		  }
 		
 		 function fun1() {
+			
 			  var testDetails = [
 			    { id: 1, name: "MRI", method: "Magnetic Resonance Imaging", price: "$345" ,report:"https://www.lalpathlabs.com/SampleReports/Z289.pdf"},
 			    // Add more test details as needed
