@@ -9,11 +9,7 @@
 
 
 <title>Home</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<%-- <jsp:include page="scripts.jsp" /> --%>
 
 
 </head>
@@ -41,132 +37,131 @@ th {
 <body>
 
 	<jsp:include page="nav.jsp" />
+	<%
+		List<testModel> slist = (List<testModel>) request.getAttribute("tests");
+	%>
+
+	<div align="center">
+		<div class="col-md-12">
+			<div id="table">
+				<table class="table mt-4">
+					<thead>
+						<h3 align="center">Test Details</h3>
+						<tr>
+							<th>Test Id</th>
+							<th>Test Name</th>
+							<th>Test Category</th>
+							<th>Test Price</th>
+							<th>Test Method</th>
+							<th>From Range</th>
+							<th>To Range</th>
+							<th>Actions</th>
 
 
+						</tr>
+					</thead>
 
-	<div class="col-md-12">
-		<div id="table">
-			<table class="table mt-4">
-				<thead>
-					<h3 align="center">Test Details</h3>
-					<tr>
-						<th>Test Id</th>
-						<th>Test Name</th>
-						<th>Test Category</th>
-						<th>Test Price</th>
-						<th>Test Method</th>
-						<th>From Range</th>
-						<th>To Range</th>
-						<th>Test Status</th>
 
-					</tr>
-				</thead>
-				<%
-				List<testModel> slist = (List<testModel>) request.getAttribute("tests");
-				%>
-
-				<%
-				for (testModel s : slist) {
-				%>
-				<tbody>
-					<tr>
-						<td><%=s.getTest_id()%></td>
-						<td><%=s.getTest_name()%></td>
-						<td><%=s.getTest_category()%></td>
-						<td><%=s.getTest_price()%></td>
-						<td><%=s.getTest_method()%></td>
-						<td><%=s.getTest_fromrange()%></td>
-						<td><%=s.getTest_torange()%></td>
-						<td><%=s.getTest_status()%></td>
-
-						<td>
-							<button class="btn btn-primary"
-								onclick="getspeci('<%=s.getTest_id()%>')">Edit</button>
-							<button class="btn btn-danger"
-								onclick="delspeci('<%=s.getTest_id()%>')">Delete</button>
-						</td>
-					</tr>
 					<%
-					}
+						for (testModel s : slist) {
 					%>
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<!-- Add more rows here -->
-	</tbody>
-	</table>
-	<center>
-		<button id="btn">Add</button>
-		<div class="col-md-9">
-
-			<form id="testform" style="display: none;" action="savetest"
-				method="post">
-
-				<center>
-					<h1>New Test Details</h1>
-				</center>
+					<tbody>
+						<tr>
+							<td><%=s.getTest_id()%></td>
+							<td><%=s.getTest_name()%></td>
+							<td><%=s.getTest_category()%></td>
+							<td><%=s.getTest_price()%></td>
+							<td><%=s.getTest_method()%></td>
+							<td><%=s.getTest_fromrange()%></td>
+							<td><%=s.getTest_torange()%></td>
 
 
-				<div class="form-group">
-					<label for="test_name" class="form-label">Test Name</label> <input
-						type="text" name="test_name" id="test_name" class="form-control"
-						required>
-				</div>
-
-				<div class="form-group">
-					<label for="test_category" class="form-label">Test category</label>
-					<input type="text" name="test_category" id="test_category"
-						class="form-control" required>
-				</div>
-
-				<div class="form-group">
-					<label for="test_price" class="form-label">Test Price</label> <input
-						type="text" name="test_price" id="test_price" class="form-control"
-						required>
-				</div>
-
-				<div class="form-group">
-					<label for="test_method" class="form-label">Method</label> <input
-						type="text" name="test_method" id="test_method"
-						class="form-control" required>
-				</div>
-
-				<div class="form-group">
-					<label for="test_fromrange" class="form-label">Normal Range
-						From</label> <input type="text" name="test_fromrange" id="test_fromrange"
-						class="form-control" required>
-				</div>
-				<div class="form-group">
-					<label for="test_torange" class="form-label">Normal Range
-						To</label> <input type="text" name="test_torange" id="test_torange"
-						class="form-control" required>
-				</div>
-				<div class="form-group">
-					<label for="test_status" class="form-label">Test Status </label> <input
-						type="text" name="test_status" id="test_status"
-						class="form-control" required>
-				</div>
-
-				<button type="submit" class="btn btn-primary btn-block">Add</button>
-
-			</form>
-
-
+							<td>
+								<button class="btn btn-primary"
+									onclick="gettest('<%=s.getTest_id()%>')">Edit</button>
+								<button class="btn btn-danger"
+									onclick="deltest('<%=s.getTest_id()%>')">Delete</button>
+							</td>
+						</tr>
+						<%
+							}
+						%>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
+		<!-- Add more rows here -->
+		</tbody>
+		</table>
+		<center>
+			<button type="button" class="btn btn-primary" id="show-btn"
+				onclick="onclickspec()">Add Test</button>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-6">
+						<div class="shadow p-3 mb-5 bg-white rounded"
+							id="specializationForm" style="display: none;">
+							<center>
+								<h1>New Test Details</h1>
+							</center>
 
-	</center>
+							<form action="./savetest" , method="post" id="edit-spec-form">
+
+
+
+
+								<input id="test_id" name="test_id" type="text" hidden>
+
+								<div class="form-group">
+									<label for="test_name" class="form-label">Test Name</label> <input
+										type="text" name="test_name" id="test_name"
+										class="form-control" required>
+								</div>
+
+								<div class="form-group">
+									<label for="test_category" class="form-label">Test
+										category</label> <input type="text" name="test_category"
+										id="test_category" class="form-control" required>
+								</div>
+
+								<div class="form-group">
+									<label for="test_price" class="form-label">Test Price</label> <input
+										type="text" name="test_price" id="test_price"
+										class="form-control" required>
+								</div>
+
+								<div class="form-group">
+									<label for="test_method" class="form-label">Method</label> <input
+										type="text" name="test_method" id="test_method"
+										class="form-control" required>
+								</div>
+
+								<div class="form-group">
+									<label for="test_fromrange" class="form-label">Normal
+										Range From</label> <input type="text" name="test_fromrange"
+										id="test_fromrange" class="form-control" required>
+								</div>
+								<div class="form-group">
+									<label for="test_torange" class="form-label">Normal
+										Range To</label> <input type="text" name="test_torange"
+										id="test_torange" class="form-control" required>
+								</div>
+
+
+								<button id="add-spec-btn" type="submit" class="btn btn-primary">Add</button>
+
+							</form>
+
+
+						</div>
+		</center>
 
 
 
 	</div>
-	</div>
-	</div>
-	</div>
 
-	<script>
+	<!--<script>
 		const btn = document.getElementById('btn');
 
 		btn.addEventListener('click', () => {
@@ -179,10 +174,12 @@ th {
 		  
 		    form.style.display = 'none';
 		  }
-		});</script>
+		});</script>-->
 
-	<button type="button" class="btn btn-primary" id="show-btn"
+
+	<!--	<button type="button" class="btn btn-primary" id="show-btn"
 		onclick="showForm()">Add Specialization</button>
+
 	<div id="specializationForm" style="display: none;">
 		<form action="updatetest" method="post">
 			<div class="form-group">
@@ -216,69 +213,106 @@ th {
 			</div>
 			<button type="submit" id="updatebtn" class="btn btn-primary">Add</button>
 		</form>
-	</div>
+	</div>  -->
 
 </body>
 <script>
+	function onclickspec() {
 
-	$('#show-btn').click(function()
-			{
-		$('#idInput').val('');
-		$('#titleInput').val('');
-		$('#descriptionInput').val('');
-		$('#price').val('');
-		$('#method').val('');
-		$('#fromrange').val('');
-		$('#torange').val('');
-		$('#status').val('');
-
+		$('#id').val('');
+		$('#test_name').val('');
+		$('#test_category').val('');
+		$('#test_price').val('');
+		$('#test_method').val('');
+		$('#test_torange').val('');
+		$('#test_fromrange').val('');
+		$('#add-spec-btn').text('Add');
 		$('#specializationForm').toggle();
-			});
-	
-	function delspeci(specid)
-	{
-		$.ajax({
-			url : "./deltest",
-			method:"post",
-			data:{
-				id:specid
-			},
-			  success: function(response) {
-			console.log(response); // You can log the response or perform further actions as needed
-        },
-        error: function(xhr, status, error) {
-            // Handle any error that occurred during the AJAX request
-            console.log("Error: " + error);
-            }
-		});
 	}
-	function getspeci(specid)
-	{
+
+	function gettest(specid) {
 		$.ajax({
-			url : "./getspec",
-			method:"post",
-			data:{
-				id:specid
+			url : "./gettest",
+			method : "post",
+			data : {
+				id : specid
 			},
 			success : function(spec) {
 				//spec=JSON.parse(spec);
-				console.log(typeof(spec));
-				$('#idInput').val(spec.test_id);
-				$('#titleInput').val(spec.test_name);
-				$('#descriptionInput').val(spec.test_category);
-				
-				$('#price').val(spec.test_price);
-				$('#method').val(spec.test_method);
-				$('#fromrange').val(spec.test_fromrange);
-				$('#torange').val(spec.test_torange);
-				$('#status').val(spec.test_status);
-					
-					
-			
+				console.log(typeof (spec));
+				console.log(spec);
+				const form = $('#edit-spec-form');
+
+				console.log("go" + spec.test_id);
+
+				$('#test_id').val(spec.test_id);
+				$('#test_name').val(spec.test_name);
+				$('#test_category').val(spec.test_category);
+
+				$('#test_price').val(spec.test_price);
+				$('#test_method').val(spec.test_method);
+				$('#test_fromrange').val(spec.test_fromrange);
+				$('#test_torange').val(spec.test_torange);
+
+				form.attr('action', './updatetest');
+				form.show();
+
 				$('#specializationForm').show();
-				$('#updatebtn').text('update');
+				$('#add-spec-btn').text('update');
+			}
+		});
+
+	}
+
+	function deltest(specid) {
+		$.confirm({
+			title : 'Confirm!',
+			content : 'Are you Sure to delete!',
+			buttons : {
+				confirm : function() {
+					$.ajax({
+						url : "./deltest",
+						method : "post",
+						data : {
+							test_id : specid
+						},
+						success : function(data) {
+							$.alert({
+								title : 'Deleted!',
+								content : 'The item has been deleted.',
+								buttons : {
+									confirm : {
+										text : 'OK',
+										action : function() {
+											// Refresh the page
+											location.reload();
+										}
+									}
+								}
+							});
+						}
+					});
+
+				},
+				cancel : function() {
+					$.alert('Canceled!');
+				},
 			}
 		});
 	}
-	</script>
-</html>
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
+<script>
+	</html>

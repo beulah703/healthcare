@@ -22,8 +22,6 @@
 		$('#titleInput').val('');
 		$('#descriptionInput').val('');
 		$('#add-spec-btn').text('Add');
-		
-		
 		$('#specializationForm').toggle();
 	}
 	$('#show-btn').click(function() {
@@ -43,17 +41,22 @@
 				id : specid
 			},
 			success : function(spec) {
-				spec = JSON.parse(spec);
+				/* spec = JSON.parse(spec); */
 				console.log(typeof (spec));
+				const form = $('#edit-spec-form');
 				$('#idInput').val(spec.id);
 				$('#titleInput').val(spec.title);
 				$('#descriptionInput').val(spec.description);
+				form.attr('action', './updatespec');
+		        form.show();
 				$('#specializationForm').show();
 				$('#add-spec-btn').text('Update');
 				
 			}
 		});
 	}
+	
+
 
 	function deletespec(specid) {
 		$.confirm({
@@ -67,8 +70,19 @@
 							id : specid
 						},
 						success : function(data) {
-							specialization();
-							$.alert('deleted!');
+							$.alert({
+								  title: 'Deleted!',
+								  content: 'The item has been deleted.',
+								  buttons: {
+								    confirm: {
+								      text: 'OK',
+								      action: function () {
+								        // Refresh the page
+								        location.reload();
+								      }
+								    }
+								  }
+								});
 						}
 					});
 
@@ -78,6 +92,20 @@
 				},
 			}
 		});
+		
+		function onclickdoc() {
+
+			console.log("Hello");
+			
+
+			$('#doctorName').val('');
+			$('#specialization').val('');
+			$('#qual').val('');
+			$('#exp').val('');
+			$('#photo').val('');
+			$('#add-spec-btn').text('Add');
+			$('#specializationForm').toggle();
+		}
 
 	}
 </script>
@@ -134,8 +162,11 @@ a, p {
 	left: 0;
 	z-index: 1;
 	overflow-y: auto;
+    background-color: #7ade8c;
+    }
+.co{
+font-weight: bold;
 }
-
 .nav-item:hover .dropdown-menu {
 	display: block;
 }

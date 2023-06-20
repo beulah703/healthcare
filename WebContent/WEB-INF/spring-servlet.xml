@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
@@ -8,7 +7,7 @@
 	xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:task="http://www.springframework.org/schema/task"
-	 xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd http://www.springframework.org/schema/mvc
            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
@@ -23,12 +22,14 @@
 	</bean>
 
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	
+	 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="jdbc:postgresql://localhost:5432/newdb" />
 		<property name="username" value="postgres" />
 		<property name="password" value="Beuganji7@" />
 	</bean>
+
 
 	<bean
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -38,27 +39,12 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-		p:packagesToScan="spring.orm" p:dataSource-ref="dataSource">
-		<property name="jpaVendorAdapter">
-			<bean
-				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="generateDdl" value="true" />
-				<property name="showSql" value="true" />
-			</bean>
-		</property>
-	</bean>
+
 
 	<!-- Transactions -->
-	<bean id="transactionManager"
-		class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory"
-			ref="entityManagerFactory" />
-	</bean>
+
 	<!-- enable the configuration of transactional behavior based on annotations -->
-	<tx:annotation-driven
-		transaction-manager="transactionManager" />
+
 
 	<mvc:annotation-driven />
 
@@ -71,8 +57,32 @@
 		<!-- Set the maximum allowed size of the entire request in bytes -->
 		<property name="maxUploadSizePerFile" value="5242880" /> <!-- 5MB -->
 	</bean>
+	<!-- Configure the EntityManagerFactory -->
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource" /> <!-- Reference to your data source bean -->
+    <property name="packagesToScan" value="spring.orm" /> <!-- Package(s) to scan for entity classes -->
+    <property name="jpaVendorAdapter">
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+    </property>
+    <property name="jpaProperties">
+        <props>
+            <prop key="hibernate.dialect">
+org.hibernate.dialect.PostgreSQLDialect</prop> <!-- Specify the appropriate database dialect -->
+            <!-- Other Hibernate or JPA properties if needed -->
+        </props>
+    </property>
+</bean>
 
+<!-- Configure the EntityManager -->
+<bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
+<!-- Configure the transaction manager -->
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
 
-
+<!-- Enable transaction support -->
+<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

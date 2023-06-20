@@ -12,7 +12,7 @@
 </head>
 <jsp:include page="scripts.jsp" />
 <body>
-<jsp:include page="nav.jsp" />
+	<jsp:include page="dcreportspage.jsp" />
 
 <div class="col-md-9">
     <h3 align="center">Payments View</h3>

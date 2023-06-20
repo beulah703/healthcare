@@ -29,7 +29,6 @@
 </head>
 <body>
 <div class="container text-center">
-    <img src="https://example.com/logo.png" class="logo img-fluid" alt="Logo">
     <h4 class="mb-4">Set Password</h4>
     <form action="passwordchange" method="post">
     <div class="form-group">

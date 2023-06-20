@@ -43,7 +43,7 @@
 				id : specid
 			},
 			success : function(spec) {
-				spec = JSON.parse(spec);
+				/* spec = JSON.parse(spec); */
 				console.log(typeof (spec));
 				$('#idInput').val(spec.id);
 				$('#titleInput').val(spec.title);

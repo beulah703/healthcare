@@ -1,6 +1,6 @@
 <div >
 	<nav class="navbar navbar-expand-lg navbar-lignt bg-success text-white">
-		<a class="navbar-brand text-white" href="./">Hospital Management
+		<a class="navbar-brand text-white" href="./">Doctor Appointment
 			System</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -15,20 +15,20 @@
 			<li><a href="./doctors" class="nav-link">Doctors</a></li>
 
 			<li class="nav-item">
+
 				<p class="nav-link" href="" id="appointmentsLink">Appointments</p>
-				<div class="dropdown-menu" aria-labelledby="appointmentsLink">
-					<a class="dropdown-item" href="./getbookapp">Booked
-						Appointments</a> <a class="dropdown-item" href="./getnewbookapp">New
+				<div class="dropdown-menu"  aria-labelledby="appointmentsLink">
+
+					<a class="dropdown-item co" href="./appointments">Booked
+						Appointments</a> <a class="dropdown-item co" href="./newappointment">New
 						Appointments</a>
+
 				</div>
 			</li>
-
-
-
 			<li><a href="./getpatient" class="nav-link">Patient Profile
 					Update</a></li>
-			<li><a href="./getpaymets" class="nav-link">Payments</a></li>
-			<li><a href="./getreports" class="nav-link">Reports</a></li>
+			<li><a href="./adminpay" class="nav-link">Payments</a></li>
+			
 		</ul>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
@@ -43,9 +43,11 @@
 							style="background: #e9ecef; color: black" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">Admin</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="/profile">My Profile</a> <a
-								class="dropdown-item" href="/settings">Settings</a> <a
-								class="dropdown-item" href="/logout">Logout</a>
+
+							<a class="dropdown-item" href="./change">change Password</a> <a
+								class="dropdown-item" href="../admin/settings">Settings</a> <a
+								class="dropdown-item" href="../">Logout</a>
+
 						</div>
 					</div>
 				</li>

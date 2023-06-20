@@ -1,10 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>HMS</title>
+<title>DAS</title>
 <jsp:include page="scripts.jsp" />
 </head>
 <body>
@@ -15,7 +13,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title">Total Doctors</h5>
-						<p class="card-text">10</p>
+						<p class="card-text">${dcount }</p>
 					</div>
 				</div>
 				<div class="card">

@@ -6,16 +6,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Home</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-
-
+<title>Patients</title>
+<jsp:include page="scripts.jsp" />
 </head>
 
 <body>
-	<jsp:include page="nav.jsp" />
+		<jsp:include page="nav.jsp" />
 	
 
 

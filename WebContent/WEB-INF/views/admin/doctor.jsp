@@ -1,64 +1,91 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="spring.orm.model.*" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ page
+	import="spring.orm.model.*, java.util.*,spring.orm.model.output.*"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <jsp:include page="scripts.jsp" />
 <title>Doctors</title>
+<style>
+    .profile-pic {
+        width: 100px; /* Adjust the size as needed */
+        height: 100px; /* Adjust the size as needed */
+        object-fit: cover; /* Maintain aspect ratio and fill the container */
+        object-position: center; /* Center the image within the container */
+        border-radius: 50%; /* Add a circular border */
+    }
+</style>
+<style>
+.custom-scroll::-webkit-scrollbar {
+	width: 0.5em;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+	background-color: transparent;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="nav.jsp" />
 	<div align="center">
 		<h2>Doctors List</h2>
-		<table class="table mt-4">
-			<thead>
-				<tr>
-					<th>Doctor ID</th>
-					<th>Doctor Name</th>
-					<th>Specialization</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody id="doctorsTableBody">
-				<!-- Static records -->
-				<tr>
-					<td>001</td>
-					<td>Dr. Smith</td>
-					<td>Cardiology</td>
-					<td>
-						<div class="floating-actions">
-							<button class="btn btn-primary">Edit</button>
-							<button class="btn btn-danger">Delete</button>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>002</td>
-					<td>Dr. Johnson</td>
-					<td>Pediatrics</td>
-					<td>
-						<div class="floating-actions">
-							<button class="btn btn-primary">Edit</button>
-							<button class="btn btn-danger">Delete</button>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>003</td>
-					<td>Dr. Lee</td>
-					<td>Orthopedics</td>
-					<td>
-						<div class="floating-actions">
-							<button class="btn btn-primary">Edit</button>
-							<button class="btn btn-danger">Delete</button>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div
+			class=" custom-scroll overflow-auto shadow p-3 m-3  bg-white rounded"
+			style="max-height: 300px;">
+			<table class="table  table-bordered table-shadow mt-4 ">
+				<thead>
+					<tr>
+						<th>Doctor ID</th>
+						<th>Doctor Name</th>
+						<th>Qualification</th>
+						<th>Experience</th>
+						<th>Photo</th>
+						<th>Fee</th>
+						<th>Available on</th>
+						<th>From Time</th>
+						<th>To Time</th>
+						<th>Avg appointment Time</th>
+						
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<c:forEach var="s" items="${docsche}">
+					<tbody>
+						<tr>
+							<td>${s.doctId}</td>
+							<td>${s.doctName}</td>
+							<td>${s.doctQual}</td>
+							<td>${s.doctExp}</td>
+							<td><img src="data:image/png;base64,${s.doctPhoto}" class="profile-pic"/></td>
+							<td>${s.doctCfee}</td>
+							<td>${s.weekday}</td>
+							<td>${s.timeFrom}</td>
+							<td>${s.timeTo}</td>
+							<td>${s.averageAppointmentTime}</td>
+							
+							<td>
+								<button class="btn btn-primary" onclick="getspec('${s.doctId}')">Edit</button>
+								<button class="btn btn-danger" onclick="deletespec('${s.doctId}')">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</c:forEach>
+
+
+
+
+				</tbody>
+			</table>
+		</div>
 		<br>
 		<div class="form-container">
 			<button type="button" class="btn btn-primary" id="show-btn-doc"
@@ -70,7 +97,8 @@
 						<div id="doctorForm" style="display: none;"
 							class="shadow p-3  bg-white rounded">
 
-							<form action="./savedoc" method="post" enctype="multipart/form-data" >
+							<form action="./savedoc" method="post"
+								enctype="multipart/form-data" modelAttribute="doctorForm">
 								<br>
 								<h2>Add Doctor</h2>
 								<div class="form-group">
@@ -81,9 +109,9 @@
 									<label for="specialization">Specialization</label> <select
 										class="form-control" id="specialization" name="docspec">
 										<c:forEach var="spec" items="${speclist}">
-										<option value="${spec.id }">${spec.title}</option>
+											<option value=${spec.id }>${spec.title}</option>
 										</c:forEach>
-										
+
 									</select>
 								</div>
 								<div class="form-group">
@@ -99,39 +127,49 @@
 									<label for="photo">Photo</label> <input type="file" id="photo"
 										name="docphoto" class="form-control" accept="image/*">
 								</div>
-
 								<div class="form-group">
-
-									<label for="daysavailable">Available Days</label> <br> <label
-										for="all">ALL</label> <input type="checkbox" name="days"
-										value="all" id="all"> <label for="mon">M</label> <input
-										type="checkbox" name="days" value="mon" id="mon"> <label
-										for="tue">T</label> <input type="checkbox" name="days"
-										value="tue" id="tue"> <label for="wed">W</label> <input
-										type="checkbox" name="days" value="wed" id="wed"> <label
-										for="thu">H</label> <input type="checkbox" name="days"
-										value="thu" id="thu"> <label for="fri">F</label> <input
-										type="checkbox" name="days" value="fri" id="fri"> <label
-										for="sat">S</label> <input type="checkbox" name="days"
-										value="sat" id="sat"> <label for="sat">U</label> <input
-										type="checkbox" name="days" value="sun" id="sun">
-
+									<label for="days">Select days:</label><br>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="ALL" value="ALL" onchange="limitSelecction()"> <label
+											class="form-check-label" for="ALL">All</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="monday" value="MON" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="monday">Monday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="tuesday" value="TUE" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="tuesday">Tuesday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="wednesday" value="WED" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="wednesday">Wednesday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="thursday" value="THU" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="thursday">Thursday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="friday" value="FRI" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="friday">Friday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="saturday" value="SAT" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="saturday">Saturday</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" name="weekday" type="checkbox"
+											id="sunday" value="SUN" onchange="limitDaysSelection()">
+										<label class="form-check-label" for="sunday">Sunday</label>
+									</div>
 								</div>
-
-								<!-- 
-				<div>
-					<select multiple class="form-group">
-						<option value="mon">Mon</option>
-						<option value="tue">Tue</option>
-						<option value="wed">Wed</option>
-						<option value="thu">Thu</option>
-						<option value="fri">Fri</option>
-						<option value="sat">Sat</option>
-						<option value="sun">Sun</option>
-
-					</select>
-				</div>
--->
 								<div class="form-group" class="form-control">
 									<label for="timeAvailable">Select Available Time</label> <br>
 									<label for="from">From</label> <input type="time" id="appt"
@@ -157,6 +195,8 @@
 	</div>
 </body>
 
+
+
 <!-- 
 <script type="text/javascript">
 var selectElement = document.querySelector('select');
@@ -164,5 +204,45 @@ var selectedOptions = Array.from(selectElement.selectedOptions).map(option => op
 console.log(selectedOptions);
 </script>
  -->
+<script>
+	function limitDaysSelection() {
+		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+		var checkedCount = 0;
+		for (var i = 0; i < checkboxes.length; i++) {
+			if (checkboxes[i].checked) {
+				checkedCount++;
+			}
+		}
+		if (checkedCount >= 3) {
+			for (var i = 0; i < checkboxes.length; i++) {
+				if (!checkboxes[i].checked) {
+					checkboxes[i].disabled = true;
+				}
+			}
+		} else {
+			for (var i = 0; i < checkboxes.length; i++) {
+				checkboxes[i].disabled = false;
+			}
+		}
+	}
 
+	function limitSelecction() {
+		console.log("calles");
+		var all = document.getElementById('ALL');
+		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+		if (all.checked) {
+			for (var i = 0; i < checkboxes.length; i++) {
+				if (!checkboxes[i].checked) {
+					checkboxes[i].disabled = true;
+				}
+			}
+		} else {
+			for (var i = 0; i < checkboxes.length; i++) {
+				checkboxes[i].disabled = false;
+			}
+
+		}
+
+	}
+</script>
 </html>
